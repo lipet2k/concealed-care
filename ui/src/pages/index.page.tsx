@@ -11,8 +11,81 @@ import {
   Bool,
 } from 'snarkyjs';
 import ZkappWorkerClient from './zkappWorkerClient';
+import { Report, Requirements } from '../../../contracts/src/ConcealedCare';
 
 let transactionFee = 0.1;
+
+function hashPatientId(inputStr: string) {
+  // Convert the input string to an integer
+  const inputNum = BigInt(inputStr);
+
+  // Multiply the input number by the given large number
+  const multiplier = BigInt(972345843293);
+  const product = inputNum * multiplier;
+
+  // Modulo the product by 1,000,000,000,000
+  const modulo = BigInt(1000000000000);
+  const result = product % modulo;
+
+  // Return the result as a regular number
+  return Number(result);
+}
+
+function stringToNumber(dateString: string): number {
+  // Remove all non-numeric characters using a regular expression
+  const numericString = dateString.replace(/\D/g, '');
+
+  // Convert the resulting string to a number
+  const number = parseInt(numericString, 10);
+
+  return number;
+}
+
+type ReportFormInput = {
+  patientId: string
+  validUntil: string
+  bloodPressure: string
+  hasConditionA: boolean
+  hasConditionB: boolean
+  hasConditionC: boolean
+}
+
+function buildReportFromFormInput(input: ReportFormInput): Report {
+  return {
+    patientIdHash: new Field(hashPatientId(input.patientId)),
+    validUntil: new Field(stringToNumber(input.validUntil)),
+    bloodPressure: new Field(stringToNumber(input.bloodPressure)),
+    hasConditionA: new Bool(input.hasConditionA),
+    hasConditionB: new Bool(input.hasConditionB),
+    hasConditionC: new Bool(input.hasConditionC),
+  }
+}
+
+
+type RequirementsFormInput = {
+  patientId: string
+  verifyTime: string
+  minBloodPressure: string
+  maxBloodPressure: string
+  allowConditionA: boolean
+  allowConditionB: boolean
+  allowConditionC: boolean
+}
+
+function buildRequirementsFromFormInput(input: RequirementsFormInput): Requirements {
+  return {
+    patientIdHash: new Field(hashPatientId(input.patientId)),
+    verifyTime: new Field(stringToNumber(input.verifyTime)),
+    minBloodPressure: new Field(stringToNumber(input.minBloodPressure)),
+    maxBloodPressure: new Field(stringToNumber(input.maxBloodPressure)),
+    allowConditionA: new Bool(input.allowConditionA),
+    allowConditionB: new Bool(input.allowConditionB),
+    allowConditionC: new Bool(input.allowConditionC),
+  }
+}
+
+
+
 
 export default function Home() {
   const [someInfo, setSomeInfo] = useState('');
@@ -33,7 +106,7 @@ export default function Home() {
     (async () => {
       await isReady;
 
-      const report = {
+      const dummyReport = {
         patientIdHash: new Field(12345678),
         validUntil: new Field(20230430),
         bloodPressure: new Field(80),
@@ -104,7 +177,7 @@ export default function Home() {
           publicKey: publicKey!,
         });
 
-        await zkappWorkerClient!.createPublishReportTransaction(report);
+        await zkappWorkerClient!.createPublishReportTransaction(dummyReport);
 
         console.log('creating proof...');
         await zkappWorkerClient!.proveTransaction();
@@ -162,6 +235,18 @@ export default function Home() {
 
 
       // setSomeInfo(display);
+
+      let reportFormInput = {
+        patientId: "12345",
+        validUntil: "2023-04-22",
+        bloodPressure: "90",
+        hasConditionA: true,
+        hasConditionB: false,
+        hasConditionC: true,
+      }
+
+
+
 
     })();
   }, []);
