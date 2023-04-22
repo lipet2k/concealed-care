@@ -41,13 +41,17 @@ function stringToNumber(dateString: string): number {
   return number;
 }
 
+function myParseBool(input: boolean | string): boolean {
+  return input === true || (input !== false && input.toLowerCase().startsWith('t'));
+}
+
 type ReportFormInput = {
   patientId: string
   validUntil: string
   bloodPressure: string
-  hasConditionA: boolean
-  hasConditionB: boolean
-  hasConditionC: boolean
+  hasConditionA: boolean | string
+  hasConditionB: boolean | string
+  hasConditionC: boolean | string
 }
 
 function buildReportFromFormInput(input: ReportFormInput): Report {
@@ -55,9 +59,9 @@ function buildReportFromFormInput(input: ReportFormInput): Report {
     patientIdHash: new Field(hashPatientId(input.patientId)),
     validUntil: new Field(stringToNumber(input.validUntil)),
     bloodPressure: new Field(stringToNumber(input.bloodPressure)),
-    hasConditionA: new Bool(input.hasConditionA),
-    hasConditionB: new Bool(input.hasConditionB),
-    hasConditionC: new Bool(input.hasConditionC),
+    hasConditionA: new Bool(myParseBool(input.hasConditionA)),
+    hasConditionB: new Bool(myParseBool(input.hasConditionB)),
+    hasConditionC: new Bool(myParseBool(input.hasConditionC)),
   }
 }
 
@@ -67,9 +71,9 @@ type RequirementsFormInput = {
   verifyTime: string
   minBloodPressure: string
   maxBloodPressure: string
-  allowConditionA: boolean
-  allowConditionB: boolean
-  allowConditionC: boolean
+  allowConditionA: boolean | string
+  allowConditionB: boolean | string
+  allowConditionC: boolean | string
 }
 
 function buildRequirementsFromFormInput(input: RequirementsFormInput): Requirements {
@@ -78,14 +82,11 @@ function buildRequirementsFromFormInput(input: RequirementsFormInput): Requireme
     verifyTime: new Field(stringToNumber(input.verifyTime)),
     minBloodPressure: new Field(stringToNumber(input.minBloodPressure)),
     maxBloodPressure: new Field(stringToNumber(input.maxBloodPressure)),
-    allowConditionA: new Bool(input.allowConditionA),
-    allowConditionB: new Bool(input.allowConditionB),
-    allowConditionC: new Bool(input.allowConditionC),
+    allowConditionA: new Bool(myParseBool(input.allowConditionA)),
+    allowConditionB: new Bool(myParseBool(input.allowConditionB)),
+    allowConditionC: new Bool(myParseBool(input.allowConditionC)),
   }
 }
-
-
-
 
 export default function Home() {
   const [someInfo, setSomeInfo] = useState('');
