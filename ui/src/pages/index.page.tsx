@@ -194,7 +194,7 @@ export default function Home() {
   //  console.log('User type changed:', userType);
   //}, [userType]);
 
-  const handleUserRoleClick = (userType) => {
+  const handleUserRoleClick = (userType: string) => {
     setUserRole(userType);
   };
 
