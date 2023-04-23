@@ -26,7 +26,7 @@ export default function NewRequest() {
     );
 };
 
-function SinglePatientBlock ({ name, num_past_reports, last_report_date, accommodations, public_key}) {
+function SinglePatientBlock ({name, num_past_reports, last_report_date, accommodations, public_key} : { name: string, num_past_reports: number, last_report_date: string, accommodations: string, public_key: string}) {
     return (
       <div className='single-patient-block box w-{95rem}'>
         <div className="tertiary-group">
