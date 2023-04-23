@@ -38,7 +38,6 @@ const Header = () => {
     <div className="heading-container bg-main">
       <div className="profile-info text-lg large-font heading-font shrink-0 mx-5 mt-2 ">
         <h3>Hospital</h3>
-        <p>MIIBOgIBAAJBAKj34GkxFhD90vcNLYL</p>
       </div>
       <NavigationBar />
     </div>
