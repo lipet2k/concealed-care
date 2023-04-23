@@ -33,8 +33,9 @@ export default function NewReport() {
   let [form1output, setForm1output] = useState("")
 
   async function publishReport(report: Report) {
+    doShowOverlay()
 
-    console.log('sending a transaction...');
+    myLog('sending transaction...');
 
     await state.zkappWorkerClient!.fetchAccount({
       publicKey: state.publicKey!,
@@ -42,13 +43,13 @@ export default function NewReport() {
 
     await state.zkappWorkerClient!.createPublishReportTransaction(report);
 
-    console.log('creating proof...');
+    myLog('creating proof...');
     await state.zkappWorkerClient!.proveTransaction();
 
-    console.log('getting Transaction JSON...');
+    myLog('getting Transaction JSON...');
     const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
 
-    console.log('requesting send transaction...');
+    myLog('requesting send transaction...');
     const { hash } = await (window as any).mina.sendTransaction({
       transaction: transactionJSON,
       feePayer: {
@@ -57,9 +58,10 @@ export default function NewReport() {
       },
     });
 
-    console.log(
+    myLog(
       'See transaction at https://berkeley.minaexplorer.com/transaction/' + hash
     );
+    doHideOverlay()
 
 
     setState({ ...state, creatingTransaction: false, hash: hash });
@@ -69,23 +71,14 @@ export default function NewReport() {
   useEffect(() => {
     (async () => {
       await isReady;
-
-      const dummyReport = {
-        patientIdHash: new Field(12345678),
-        validUntil: new Field(20230430),
-        bloodPressure: new Field(80),
-        hasConditionA: new Bool(true),
-        hasConditionB: new Bool(false),
-        hasConditionC: new Bool(true),
-      };
-
+      doShowOverlay()
 
       if (!state.hasBeenSetup) {
         const zkappWorkerClient = new ZkappWorkerClient();
 
-        console.log('Loading SnarkyJS...');
+        myLog('Loading SnarkyJS...');
         await zkappWorkerClient.loadSnarkyJS();
-        console.log('done');
+        myLog('done');
 
         await zkappWorkerClient.setActiveInstanceToBerkeley();
 
@@ -98,9 +91,9 @@ export default function NewReport() {
         const publicKeyBase58: string = (await mina.requestAccounts())[0];
         const publicKey = PublicKey.fromBase58(publicKeyBase58);
 
-        console.log('using key', publicKey.toBase58());
+        myLog('using key', publicKey.toBase58());
 
-        console.log('checking if account exists...');
+        myLog('checking if account exists...');
         const res = await zkappWorkerClient.fetchAccount({
           publicKey: publicKey!,
         });
@@ -108,9 +101,9 @@ export default function NewReport() {
 
         await zkappWorkerClient.loadContract();
 
-        console.log('compiling zkApp');
+        myLog('compiling zkApp');
         await zkappWorkerClient.compileContract();
-        console.log('zkApp compiled');
+        myLog('zkApp compiled');
 
         const zkappPublicKey = PublicKey.fromBase58(
           'B62qjXhUsobQLkQAjRxoPBpHN2bDAF27N8a6UhrdDCEyZWmY6C8v43Q'
@@ -118,11 +111,12 @@ export default function NewReport() {
 
         await zkappWorkerClient.initZkappInstance(zkappPublicKey);
 
-        console.log('getting zkApp state...');
+        myLog('getting zkApp state...');
         await zkappWorkerClient.fetchAccount({ publicKey: zkappPublicKey });
-        console.log('READY!')
+        myLog('READY!')
+        doHideOverlay()
         // const currentNum = await zkappWorkerClient.getNum();
-        // console.log('current state:', currentNum.toString());
+        // myLog('current state:', currentNum.toString());
 
         setState({
           ...state,
@@ -149,8 +143,39 @@ export default function NewReport() {
   const [condition_1, setCondition_1] = useState("");
   const [condition_2, setCondition_2] = useState("");
   const [condition_3, setCondition_3] = useState("");
+
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [logs, setLogs] = useState<any[]>([]);
+
+  function doShowOverlay() {
+    setLogs([])
+    setShowOverlay(true)
+  }
+
+  function doHideOverlay() {
+    setShowOverlay(false)
+  }
+
+  const myLog = (...message: any) => {
+    console.log(...message)
+    setLogs((prevLogs) => [...(prevLogs || []), message]);
+  };
+
+
   return (
     <div className="App bg-white-50 dark:bg-zinc-900">
+      {showOverlay && (
+        <div className="overlay">
+          <div className="overlay-content">
+            <h1>Processing...</h1>
+            <ul ><code className="mt-5">
+              {logs.map((log, index) => (
+                <li key={index}>{log}</li>
+              ))}
+            </code></ul>
+          </div>
+        </div>
+      )}
       <Sidebar />
       <div className="generate-keys">
         <h1>New Report</h1>
@@ -274,4 +299,5 @@ export default function NewReport() {
       </div>
     </div>
   );
+
 };
