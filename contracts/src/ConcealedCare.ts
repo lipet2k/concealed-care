@@ -88,7 +88,12 @@ export class ConcealedCare extends SmartContract {
       Requirements.toFields(requirementsToCheck)
     );
 
-    this.verifiedRequirementsHash.get().assertGreaterThan(Field(0));
+    const currentRequirementsHash = this.verifiedRequirementsHash.get()
+
+    console.log('incoming requirements hash: ', requirementsHashToCheck)
+    console.log('current requirements hash: ', currentRequirementsHash)
+
+    currentRequirementsHash.assertGreaterThan(Field(0));
     this.verifiedRequirementsHash.assertEquals(requirementsHashToCheck);
 
     this.emitEvent('verified', requirementsHashToCheck);

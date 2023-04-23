@@ -1,4 +1,4 @@
-import { ConcealedCare } from './ConcealedCare.js';
+import { ConcealedCare, Requirements } from './ConcealedCare.js';
 import {
   isReady,
   shutdown,
@@ -7,6 +7,7 @@ import {
   PrivateKey,
   AccountUpdate,
   Bool,
+  Poseidon,
 } from 'snarkyjs';
 
 await isReady;
@@ -75,7 +76,19 @@ const publishAccommodationProofRes = await publishAccommodationProofTxn
   .sign([senderKey])
   .send();
 
-// EMPLOYER CHECK PROOF
+// EMPLOYER CHECK PROOF #1
+
+const curHash = zkAppInstance.verifiedRequirementsHash.get()
+const desiredHash = Poseidon.hash(Requirements.toFields(requirements))
+console.log('curHash', curHash)
+console.log('desiredHash', desiredHash)
+if (JSON.stringify(curHash) == JSON.stringify(desiredHash)) {
+  console.log('Requirements hash verified!')
+} else {
+  console.log('FAILED! Requirements hash not verified')
+}
+
+// EMPLOYER CHECK PROOF #2
 
 const verifyAccommodationProofTxn = await Mina.transaction(
   senderAccount,
