@@ -4,6 +4,7 @@ import { RiHospitalFill } from "react-icons/ri";
 import { TbReportMedical } from "react-icons/tb";
 import React, { useContext } from 'react';
 import UserTypeContext from '../contexts/UserTypeContext';
+import { FaUser, FaBuilding, FaStethoscope } from 'react-icons/fa';
 
 const NavigationBar = () => {
   const { userRole } = useContext(UserTypeContext);
@@ -11,6 +12,19 @@ const NavigationBar = () => {
     <div className="sidenav flex-col flex w-48">
       <div><img id="logo" src="/assets/cc-logo.svg"></img></div>
       <div className="links-container ml-10">
+
+        <div>
+            <button id="doctorBtn" className="circular-button">
+                <FaUser />
+            </button>
+            <button id="employerBtn" className="circular-button">
+                <FaBuilding />
+            </button>
+            <button id="patientBtn" className="circular-button">
+                <FaStethoscope />
+            </button>
+        </div>
+
         {userRole === 'doctor' && <Link className="nav-item mt-5" href="/patients">
           <button className="btn-col-main hover:bg-blue-700 text-white py-2 px-4 rounded">
             <RiHospitalFill /> Patients

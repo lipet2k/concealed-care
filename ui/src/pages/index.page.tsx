@@ -158,6 +158,23 @@ export default function NewReport() {
   }
 
   useEffect(() => {
+
+    const showDoctorBtn = document.getElementById('patientBtn');
+    const showEmployerBtn = document.getElementById('employerBtn');
+    const showPatientBtn = document.getElementById('doctorBtn');
+
+    showDoctorBtn.addEventListener('click', () => {
+      toggleVisibility('.doctor');
+    });
+
+    showEmployerBtn.addEventListener('click', () => {
+      toggleVisibility('.employer');
+    });
+
+    showPatientBtn.addEventListener('click', () => {
+      toggleVisibility('.patient');
+    });
+
     (async () => {
       await isReady;
       doShowOverlay()
@@ -224,6 +241,17 @@ export default function NewReport() {
     })();
   }, []);
 
+  const toggleVisibility = (visibleClass) => {
+    const doctorDiv = document.querySelector('.doctor');
+    const employerDiv = document.querySelector('.employer');
+    const patientDiv = document.querySelector('.patient');
+
+    doctorDiv.classList.remove('visible');
+    employerDiv.classList.remove('visible');
+    patientDiv.classList.remove('visible');
+
+    document.querySelector(visibleClass).classList.add('visible');
+  };
 
 
   const [patientID, setPatientID] = useState("");
@@ -280,6 +308,7 @@ export default function NewReport() {
       )}
       <Sidebar />
       <div className="generate-keys">
+        <div className="doctor">
         <h1>Doctor - Report Patient Medical Conditions</h1>
 
         <form
@@ -398,7 +427,9 @@ export default function NewReport() {
             <code>{form1output}</code>
           </pre>
         </>)}
+        </div>
 
+        <div className="employer">
         <h1>Employer - Request Accomodation Proof from Patient</h1>
         <NewRequest submitRequest={submitRequest} />
         {form2output && (<>
@@ -408,6 +439,16 @@ export default function NewReport() {
           </pre>
         </>)}
 
+        <h1>Employer - Verify Accomodation Proof</h1>
+        <VerifyAccomProof submitVerifyAccomProof={submitVerifyAccomProof} />
+        {form4output && (<>
+          <h1>Accomodation proof verified!</h1>
+          <a className="my-5" href={'https://berkeley.minaexplorer.com/transaction/' + state.hash}><code>{state.hash}</code></a>
+        </>)}
+
+        </div>
+
+        <div className="patient">
         <h1>Patient - Submit Accommodation Proof</h1>
         <AccomProof submitAccomProof={submitAccomProof} />
         {form3output && (<>
@@ -415,14 +456,43 @@ export default function NewReport() {
           <a className="my-5" href={'https://berkeley.minaexplorer.com/transaction/' + state.hash}><code>{state.hash}</code></a>
         </>)}
 
-        <h1>Employer - Verify Accomodation Proof</h1>
-        <VerifyAccomProof submitVerifyAccomProof={submitVerifyAccomProof} />
-        {form4output && (<>
-          <h1>Accomodation proof verified!</h1>
-          <a className="my-5" href={'https://berkeley.minaexplorer.com/transaction/' + state.hash}><code>{state.hash}</code></a>
-        </>)}
+        <form className="main-form" action="" method="get">
+            <h2>Employer Requests</h2>
+
+            <div className="tertiary-group">
+                <h4 className="green">PASS</h4>
+                <p>Company Name: <span>Fake Starbucks</span></p>
+                <p>Accommodations: <span>Reserved Parking</span></p>
+                <p>Status: <span className="orange">Not Sent</span></p>
+
+                <button
+                className="button-main middle right hover:bg-blue-800 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                type="button"
+                >
+                    ENCRYPT AND PUBLISH
+                </button>
+            </div>
+
+            <div className="tertiary-group">
+                <h4 className="red">NOT PASS</h4>
+                <p>Company Name: <span>Fake Starbucks</span></p>
+                <p>Accommodations: <span>Flexible Work Hours</span></p>
+                <p>Status: <span className="orange">Not Sent</span></p>
+
+                <button
+                className="button-main middle right hover:bg-blue-800 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                type="button"
+                >
+                    ENCRYPT AND PUBLISH
+                </button>
+            </div>
+        </form>
+
+        </div>
+
+        </div>
       </div>
-    </div>
+
 
   );
 
