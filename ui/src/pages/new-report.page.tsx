@@ -7,7 +7,7 @@ export default function NewReport() {
       <div className="generate-keys">
         <h1>New Report</h1>
         <form className="main-form" action="" method="get">
-          <h2>Christian Adelmund</h2>
+          <h2>Ruby Adelmund</h2>
           <p className="secondary">hdI4yZ5ew18JH4JW9jbhUFrviQzM7</p>
 
           <div className="top-right"><button className="secondary">Import</button></div>

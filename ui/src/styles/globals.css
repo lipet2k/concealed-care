@@ -332,3 +332,27 @@ pre {
 .bg-main {
   background-color: #FBFBFC;
 }
+
+.circular-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1856C7;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 5px;
+  transition: 0.3s;
+}
+
+.circular-button:hover {
+  background-color: #0d3c9f;
+}
+
+.circular-button:active {
+  background-color: #0a2f7d;
+}

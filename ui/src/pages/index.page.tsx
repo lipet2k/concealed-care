@@ -1,6 +1,9 @@
 
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import UserTypeContext from '../contexts/UserTypeContext';
+import React, { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import {
   Mina,
@@ -11,6 +14,8 @@ import {
   Bool,
 } from 'snarkyjs';
 import ZkappWorkerClient from './zkappWorkerClient';
+import Sidebar from "@/components/Sidebar";
+import { FaUser, FaBuilding, FaStethoscope } from 'react-icons/fa';
 
 let transactionFee = 0.1;
 
@@ -166,10 +171,37 @@ export default function Home() {
     })();
   }, []);
 
+  const { setUserRole } = useContext(UserTypeContext);
+  const router = useRouter();
+  
+  //const { userType } = useContext(UserTypeContext);
+
+  //useEffect(() => {
+  //  console.log('User type changed:', userType);
+  //}, [userType]);
+
+  const handleUserRoleClick = (userType) => {
+    setUserRole(userType);
+  };
+
   return (
     <div>
-      <h1>Concealed Care</h1>
-      <p>{someInfo}</p>
-    </div>
+      <Sidebar />
+      <div className="generate-keys">
+        <h1>Sign in as:</h1>
+        <div>
+            <button className="circular-button" onClick={() => handleUserRoleClick('user')}>
+                <FaUser />
+            </button>
+            <button className="circular-button" onClick={() => handleUserRoleClick('company')}>
+                <FaBuilding />
+            </button>
+            <button className="circular-button" onClick={() => handleUserRoleClick('doctor')}>
+                <FaStethoscope />
+            </button>
+            </div>
+         </div>
+      </div>
+
   );
 }
