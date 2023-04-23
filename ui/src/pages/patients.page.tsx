@@ -2,7 +2,30 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 
 export default function NewRequest() {
-  let patients = [{name: "Trevor Keith", num_past_reports: 0, last_report_date: "1/1/2000", accommodations: "None", public_key: "abc"}];
+  let patients = [
+    {
+      name: "Samantha Hopkins",
+      num_past_reports: 0,
+      last_report_date: "1/1/2000",
+      accommodations: "None",
+      public_key: "abc",
+    },
+    {
+      name: "Jonathan Hsieh",
+      num_past_reports: 2,
+      last_report_date: "3/3/1999",
+      accommodations: "None",
+      public_key: "abc",
+    },
+    
+    {
+      name: "Jessica Langdon",
+      num_past_reports: 0,
+      last_report_date: "12/19/1978",
+      accommodations: "None",
+      public_key: "abc",
+    }
+  ];
   return (
     <div>
         <Sidebar />
