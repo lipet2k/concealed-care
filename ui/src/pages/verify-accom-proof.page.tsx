@@ -40,7 +40,7 @@ export default function VerifyAccomProof({ submitVerifyAccomProof }: { submitVer
           className="button-main right hover:bg-blue-800 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
           type="submit"
         >
-          Generate medical report
+          Verify proof
         </button>
       </div>
     </form>
