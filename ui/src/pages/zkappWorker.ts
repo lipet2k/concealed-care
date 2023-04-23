@@ -39,10 +39,10 @@ const functions = {
     const publicKey = PublicKey.fromBase58(args.publicKey58);
     state.zkapp = new state.ConcealedCare!(publicKey);
   },
-  // getNum: async (args: {}) => {
-  //   const currentNum = await state.zkapp!.num.get();
-  //   return JSON.stringify(currentNum.toJSON());
-  // },
+  getRequirementsHash: async (args: {}) => {
+    const currentNum = await state.zkapp!.verifiedRequirementsHash.fetch();
+    return JSON.stringify(currentNum!.toJSON());
+  },
   createPublishReportTransaction: async (args: { report: Report }) => {
     const transaction = await Mina.transaction(() => {
       state.zkapp!.publishReport(args.report);
@@ -56,6 +56,7 @@ const functions = {
     state.transaction = transaction;
   },
   createVerifyAccomProofTransaction: async (args: { requirements: Requirements }) => {
+    console.log('createVerifyAccomProofTransaction: ', args.requirements)
     const transaction = await Mina.transaction(() => {
       state.zkapp!.verifyAccommodationProof(args.requirements);
     });

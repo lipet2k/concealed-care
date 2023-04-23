@@ -39,7 +39,6 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
         <h3>Patient ID</h3>
         <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="123"
           onChange={(e) => {
@@ -52,7 +51,6 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
         <h3>Verify Date</h3>
         <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="YYYY-MM-DD"
           onChange={(e) => {
@@ -65,7 +63,6 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
         <h3>Minimum Blood Pressure</h3>
             <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="90"
           onChange={(e) => {
@@ -79,7 +76,6 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
         <h3>Maximum Blood Pressure</h3>
             <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="90"
           onChange={(e) => {
@@ -89,10 +85,9 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
       </div>
 
       <div className="coditions mt-5">
-        <h3>Condition #1</h3>
+        <h3>Allow Condition #1</h3>
             <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="True"
           onChange={(e) => {
@@ -102,10 +97,9 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
       </div>
 
       <div className="coditions mt-5">
-        <h3>Condition #2</h3>
+        <h3>Allow Condition #2</h3>
         <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="True"
           onChange={(e) => {
@@ -115,10 +109,9 @@ export default function NewRequest({ submitRequest }: { submitRequest: (x: Requi
       </div>
 
       <div className="coditions mt-5">
-        <h3>Condition #3</h3>
+        <h3>Allow Condition #3</h3>
         <input
           className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-          id="condition-1"
           type="text"
           placeholder="True"
           onChange={(e) => {

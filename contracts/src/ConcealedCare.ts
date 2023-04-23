@@ -78,17 +78,38 @@ export class ConcealedCare extends SmartContract {
       .assertTrue();
 
     this.verifiedRequirementsHash.set(
-      Poseidon.hash(Requirements.toFields(requirementsToCheck))
+      Poseidon.hash([
+        new Field(requirementsToCheck.patientIdHash),
+        new Field(requirementsToCheck.verifyTime),
+        new Field(requirementsToCheck.minBloodPressure),
+        new Field(requirementsToCheck.maxBloodPressure),
+        new Bool(requirementsToCheck.allowConditionA).toField(),
+        new Bool(requirementsToCheck.allowConditionB).toField(),
+        new Bool(requirementsToCheck.allowConditionC).toField(),
+      ])
     );
   }
 
   // employer calls this method to verify that the requested requirements are met
   @method verifyAccommodationProof(requirementsToCheck: Requirements) {
     const requirementsHashToCheck = Poseidon.hash(
-      Requirements.toFields(requirementsToCheck)
+      [
+        new Field(requirementsToCheck.patientIdHash),
+        new Field(requirementsToCheck.verifyTime),
+        new Field(requirementsToCheck.minBloodPressure),
+        new Field(requirementsToCheck.maxBloodPressure),
+        new Bool(requirementsToCheck.allowConditionA).toField(),
+        new Bool(requirementsToCheck.allowConditionB).toField(),
+        new Bool(requirementsToCheck.allowConditionC).toField(),
+      ]
     );
 
-    this.verifiedRequirementsHash.get().assertGreaterThan(Field(0));
+    const currentRequirementsHash = this.verifiedRequirementsHash.get()
+
+    // console.log('incoming requirements hash: ', requirementsHashToCheck)
+    // console.log('current requirements hash: ', currentRequirementsHash)
+
+    currentRequirementsHash.assertGreaterThan(Field(0));
     this.verifiedRequirementsHash.assertEquals(requirementsHashToCheck);
 
     this.emitEvent('verified', requirementsHashToCheck);

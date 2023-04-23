@@ -37,10 +37,10 @@ export default class ZkappWorkerClient {
     return this._call('initZkappInstance', { publicKey58: publicKey.toBase58() });
   }
 
-  // async getNum(): Promise<Field> {
-  //   const result = await this._call('getNum', {});
-  //   return Field.fromJSON(JSON.parse(result as string));
-  // }
+  async getRequirementsHash(): Promise<Field> {
+    const result = await this._call('getRequirementsHash', {});
+    return Field.fromJSON(JSON.parse(result as string));
+  }
 
   createPublishReportTransaction(report: Report) {
     return this._call('createPublishReportTransaction', { report });

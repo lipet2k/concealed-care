@@ -9,6 +9,7 @@ import {
   fetchAccount,
   Field,
   Bool,
+  Poseidon,
 } from 'snarkyjs';
 import ZkappWorkerClient from './zkappWorkerClient';
 import { Report, Requirements } from '../../../contracts/src/ConcealedCare';
@@ -47,6 +48,8 @@ export default function NewReport() {
       publicKey: state.publicKey!,
     });
 
+
+    myLog('creating transaction...');
     await state.zkappWorkerClient!.createPublishReportTransaction(report);
 
     myLog('creating proof...');
@@ -127,33 +130,53 @@ export default function NewReport() {
     });
 
     try {
-      await state.zkappWorkerClient!.createVerifyAccomProofTransaction(requirements);
+      const curRequirementsHash = await state.zkappWorkerClient!.getRequirementsHash()
+      const expectedRequirementsHash = Poseidon.hash([
+        new Field(requirements.patientIdHash),
+        new Field(requirements.verifyTime),
+        new Field(requirements.minBloodPressure),
+        new Field(requirements.maxBloodPressure),
+        new Bool(requirements.allowConditionA).toField(),
+        new Bool(requirements.allowConditionB).toField(),
+        new Bool(requirements.allowConditionC).toField(),
+      ])
 
-      await state.zkappWorkerClient!.proveTransaction();
+      if (JSON.stringify(curRequirementsHash) != JSON.stringify(expectedRequirementsHash)) {
+        alert('FAILED TO VERIFY!')
+      } else {
+        myLog('Requirements verified!')
+        await new Promise(r => setTimeout(r, 2000));
+      }
 
-      myLog('getting transaction JSON...');
-      const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
 
-      myLog('requesting send transaction...');
-      var { hash } = await (window as any).mina.sendTransaction({
-        transaction: transactionJSON,
-        feePayer: {
-          fee: transactionFee,
-          memo: '',
-        },
-      });
+
+      // await state.zkappWorkerClient!.createVerifyAccomProofTransaction(requirements);
+
+      // await state.zkappWorkerClient!.proveTransaction();
+
+      // myLog('getting transaction JSON...');
+      // const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
+
+      // myLog('requesting send transaction...');
+      // var { hash } = await (window as any).mina.sendTransaction({
+      //   transaction: transactionJSON,
+      //   feePayer: {
+      //     fee: transactionFee,
+      //     memo: '',
+      //   },
+      // });
 
     } catch (e) {
       alert('failed to verify proof: ' + e)
     }
 
-    myLog(
-      'See transaction at https://berkeley.minaexplorer.com/transaction/' + hash
-    );
+    // myLog(
+    //   'See transaction at https://berkeley.minaexplorer.com/transaction/' + hash
+    // );
     doHideOverlay()
 
 
-    setState({ ...state, creatingTransaction: false, hash: hash });
+    // setState({ ...state, creatingTransaction: false, hash: hash });
     setForm4output("ok")
   }
 
@@ -212,7 +235,7 @@ export default function NewReport() {
         myLog('zkApp compiled');
 
         const zkappPublicKey = PublicKey.fromBase58(
-          'B62qjXhUsobQLkQAjRxoPBpHN2bDAF27N8a6UhrdDCEyZWmY6C8v43Q'
+          'B62qmYXReS5MVF5fZzR8pEtPwjA4zFkzMZJ5N4pmFsEEBS8RbGbAoLZ'
         );
 
         await zkappWorkerClient.initZkappInstance(zkappPublicKey);
@@ -438,12 +461,12 @@ export default function NewReport() {
             <code>{form2output}</code>
           </pre>
         </>)}
-
+        
         <h1>Employer - Verify Accomodation Proof</h1>
         <VerifyAccomProof submitVerifyAccomProof={submitVerifyAccomProof} />
         {form4output && (<>
           <h1>Accomodation proof verified!</h1>
-          <a className="my-5" href={'https://berkeley.minaexplorer.com/transaction/' + state.hash}><code>{state.hash}</code></a>
+          {/* <a className="my-5" href={'https://berkeley.minaexplorer.com/transaction/' + state.hash}><code>{state.hash}</code></a> */}
         </>)}
 
         </div>
