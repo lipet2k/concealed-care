@@ -6,7 +6,7 @@ import {
 } from 'snarkyjs'
 
 import type { ZkappWorkerRequest, ZkappWorkerReponse, WorkerFunctions } from './zkappWorker';
-import { Report } from '../../../contracts/src/ConcealedCare';
+import { Report, Requirements } from '../../../contracts/src/ConcealedCare';
 
 export default class ZkappWorkerClient {
 
@@ -44,6 +44,14 @@ export default class ZkappWorkerClient {
 
   createPublishReportTransaction(report: Report) {
     return this._call('createPublishReportTransaction', { report });
+  }
+
+  createPublishAccomProofTransaction(report: Report, requirements: Requirements) {
+    return this._call('createPublishAccomProofTransaction', { report, requirements });
+  }
+
+  createVerifyAccomProofTransaction(requirements: Requirements) {
+    return this._call('createVerifyAccomProofTransaction', { requirements });
   }
 
   proveTransaction() {

@@ -1,4 +1,4 @@
-import NewReport from "./new-report.page";
+import NewReport from "./index.page";
 import NewRequest from "./new-request.page";
 import Patients from "./patients.page";
 

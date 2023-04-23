@@ -51,6 +51,18 @@ export function buildReportFromFormInput(input: ReportFormInput): Report {
   }
 }
 
+export function reportFromJson(json: string): Report {
+  const raw = JSON.parse(json)
+  return {
+    patientIdHash: new Field(raw.patientIdHash),
+    validUntil: new Field(raw.validUntil),
+    bloodPressure: new Field(raw.bloodPressure),
+    hasConditionA: new Bool(raw.hasConditionA),
+    hasConditionB: new Bool(raw.hasConditionB),
+    hasConditionC: new Bool(raw.hasConditionC),
+  }
+}
+
 
 export type RequirementsFormInput = {
   patientId: string
@@ -71,5 +83,19 @@ export function buildRequirementsFromFormInput(input: RequirementsFormInput): Re
     allowConditionA: new Bool(myParseBool(input.allowConditionA)),
     allowConditionB: new Bool(myParseBool(input.allowConditionB)),
     allowConditionC: new Bool(myParseBool(input.allowConditionC)),
+  }
+}
+
+
+export function requirementsFromJson(json: string): Requirements {
+  const raw = JSON.parse(json)
+  return {
+    patientIdHash: new Field(raw.patientIdHash),
+    verifyTime: new Field(raw.verifyTime),
+    minBloodPressure: new Field(raw.minBloodPressure),
+    maxBloodPressure: new Field(raw.maxBloodPressure),
+    allowConditionA: new Bool(raw.allowConditionA),
+    allowConditionB: new Bool(raw.allowConditionB),
+    allowConditionC: new Bool(raw.allowConditionC),
   }
 }

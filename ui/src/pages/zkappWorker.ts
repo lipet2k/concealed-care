@@ -4,7 +4,7 @@ type Transaction = Awaited<ReturnType<typeof Mina.transaction>>;
 
 // ---------------------------------------------------------------------------------------
 
-import type { ConcealedCare, Report } from '../../../contracts/src/ConcealedCare';
+import type { ConcealedCare, Report, Requirements } from '../../../contracts/src/ConcealedCare';
 
 const state = {
   ConcealedCare: null as null | typeof ConcealedCare,
@@ -46,6 +46,18 @@ const functions = {
   createPublishReportTransaction: async (args: { report: Report }) => {
     const transaction = await Mina.transaction(() => {
       state.zkapp!.publishReport(args.report);
+    });
+    state.transaction = transaction;
+  },
+  createPublishAccomProofTransaction: async (args: { report: Report, requirements: Requirements }) => {
+    const transaction = await Mina.transaction(() => {
+      state.zkapp!.publishAccommodationProof(args.report, args.requirements);
+    });
+    state.transaction = transaction;
+  },
+  createVerifyAccomProofTransaction: async (args: { requirements: Requirements }) => {
+    const transaction = await Mina.transaction(() => {
+      state.zkapp!.verifyAccommodationProof(args.requirements);
     });
     state.transaction = transaction;
   },
