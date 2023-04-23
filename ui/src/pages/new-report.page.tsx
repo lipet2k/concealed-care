@@ -154,6 +154,7 @@ export default function NewReport() {
       <Sidebar />
       <div className="generate-keys">
         <h1>New Report</h1>
+
         <form
           className="main-form"
           onSubmit={(e: any) => {
@@ -255,12 +256,12 @@ export default function NewReport() {
             ></input>
           </div>
           <div className='mt-16'>
-          <button
-            className="button-main right hover:bg-blue-800 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+            <button
+              className="button-main right hover:bg-blue-800 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
               type="submit"
-          >
+            >
               Generate medical report
-          </button>
+            </button>
           </div>
         </form>
         {form1output && (<>
