@@ -31,6 +31,18 @@ const requirements = {
   allowConditionC: new Bool(false),
 };
 
+function reqsToArray(requirements: Requirements) {
+  return [
+    new Field(requirements.patientIdHash),
+    new Field(requirements.verifyTime),
+    new Field(requirements.minBloodPressure),
+    new Field(requirements.maxBloodPressure),
+    new Bool(requirements.allowConditionA).toField(),
+    new Bool(requirements.allowConditionB).toField(),
+    new Bool(requirements.allowConditionC).toField(),
+  ]
+}
+
 const useProof = false;
 const Local = Mina.LocalBlockchain({ proofsEnabled: useProof });
 Mina.setActiveInstance(Local);
@@ -79,9 +91,9 @@ const publishAccommodationProofRes = await publishAccommodationProofTxn
 // EMPLOYER CHECK PROOF #1
 
 const curHash = zkAppInstance.verifiedRequirementsHash.get()
-const desiredHash = Poseidon.hash(Requirements.toFields(requirements))
-console.log('curHash', curHash)
-console.log('desiredHash', desiredHash)
+const desiredHash = Poseidon.hash(reqsToArray(requirements))
+// console.log('curHash', curHash)
+// console.log('desiredHash', desiredHash)
 if (JSON.stringify(curHash) == JSON.stringify(desiredHash)) {
   console.log('Requirements hash verified!')
 } else {

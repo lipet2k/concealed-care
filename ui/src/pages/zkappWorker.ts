@@ -40,8 +40,8 @@ const functions = {
     state.zkapp = new state.ConcealedCare!(publicKey);
   },
   getRequirementsHash: async (args: {}) => {
-    const currentNum = await state.zkapp!.verifiedRequirementsHash.get();
-    return JSON.stringify(currentNum.toJSON());
+    const currentNum = await state.zkapp!.verifiedRequirementsHash.fetch();
+    return JSON.stringify(currentNum!.toJSON());
   },
   createPublishReportTransaction: async (args: { report: Report }) => {
     const transaction = await Mina.transaction(() => {
