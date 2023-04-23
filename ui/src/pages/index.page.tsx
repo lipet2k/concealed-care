@@ -83,22 +83,29 @@ export default function NewReport() {
       publicKey: state.publicKey!,
     });
 
-    await state.zkappWorkerClient!.createPublishAccomProofTransaction(report, requirements);
+    try {
 
-    myLog('creating proof...');
-    await state.zkappWorkerClient!.proveTransaction();
+      myLog('creating transaction...');
+      await state.zkappWorkerClient!.createPublishAccomProofTransaction(report, requirements);
 
-    myLog('getting transaction JSON...');
-    const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
+      myLog('creating proof...');
+      await state.zkappWorkerClient!.proveTransaction();
 
-    myLog('requesting send transaction...');
-    const { hash } = await (window as any).mina.sendTransaction({
-      transaction: transactionJSON,
-      feePayer: {
-        fee: transactionFee,
-        memo: '',
-      },
-    });
+      myLog('getting transaction JSON...');
+      const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
+
+      myLog('requesting send transaction...');
+      var { hash } = await (window as any).mina.sendTransaction({
+        transaction: transactionJSON,
+        feePayer: {
+          fee: transactionFee,
+          memo: '',
+        },
+      });
+
+    } catch (e) {
+      alert('failed to generate proof: ' + e)
+    }
 
     myLog(
       'See transaction at https://berkeley.minaexplorer.com/transaction/' + hash
@@ -119,21 +126,26 @@ export default function NewReport() {
       publicKey: state.publicKey!,
     });
 
-    await state.zkappWorkerClient!.createVerifyAccomProofTransaction(requirements);
+    try {
+      await state.zkappWorkerClient!.createVerifyAccomProofTransaction(requirements);
 
-    await state.zkappWorkerClient!.proveTransaction();
+      await state.zkappWorkerClient!.proveTransaction();
 
-    myLog('getting transaction JSON...');
-    const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
+      myLog('getting transaction JSON...');
+      const transactionJSON = await state.zkappWorkerClient!.getTransactionJSON();
 
-    myLog('requesting send transaction...');
-    const { hash } = await (window as any).mina.sendTransaction({
-      transaction: transactionJSON,
-      feePayer: {
-        fee: transactionFee,
-        memo: '',
-      },
-    });
+      myLog('requesting send transaction...');
+      var { hash } = await (window as any).mina.sendTransaction({
+        transaction: transactionJSON,
+        feePayer: {
+          fee: transactionFee,
+          memo: '',
+        },
+      });
+
+    } catch (e) {
+      alert('failed to verify proof: ' + e)
+    }
 
     myLog(
       'See transaction at https://berkeley.minaexplorer.com/transaction/' + hash
@@ -256,6 +268,7 @@ export default function NewReport() {
     <div className="App bg-white-50 dark:bg-zinc-900">
       {showOverlay && (
         <div className="overlay">
+          <button onClick={doHideOverlay}>Hide</button>
           <div className="overlay-content">
             <ul ><code className="mt-5">
               {logs.map((log, index) => (
