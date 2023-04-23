@@ -47,6 +47,8 @@ export default function NewReport() {
       publicKey: state.publicKey!,
     });
 
+
+    myLog('creating transaction...');
     await state.zkappWorkerClient!.createPublishReportTransaction(report);
 
     myLog('creating proof...');
